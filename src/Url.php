@@ -2,54 +2,57 @@
 
 namespace ProlificRohit\Sitemaps;
 
-class Url
+use Closure;
+use XMLWriter;
+use ProlificRohit\Sitemaps\Element;
+
+class Url extends Element
 {
+    const ELEMENT_ROOT = "url";
     const ELEMENT_LOC = "loc";
     const ELEMENT_LASTMOD = "lastmod";
     const ELEMENT_PRIORITY = "priority";
     const ELEMENT_FREQUENCY = "changefreq";
-    const ELEMENT_IMAGE = "image:image";
-    const ELEMENT_VIDEO = "video:video";
 
-    protected $xmlWriter;
-
-    public function __construct($xmlWriter, $loc)
+    public function __construct(XMLWriter $xmlWriter, $loc)
     {
-        $this->xmlWriter = $xmlWriter;
-        $this->xmlWriter->startElement(self::ELEMENT_URL);
-        $this->setLoc($loc);
-    }
-
-    protected function setLoc($loc)
-    {
-        $this->xmlWriter->startElement(Self::ELEMENT_LOC);
-        $this->xmlWriter->text($loc);
-        $this->xmlWriter->endElement();
+        parent::__construct($xmlWriter, $loc);
     }
 
     public function setLastMod($lastmod)
     {
-        $this->xmlWriter->startElement(Self::ELEMENT_LASTMOD);
+        $this->xmlWriter->startElement(self::ELEMENT_LASTMOD);
         $this->xmlWriter->text($lastmod);
         $this->xmlWriter->endElement();
     }
 
     public function setPriority($priority)
     {
-        $this->xmlWriter->startElement(Self::ELEMENT_PRIORITY);
+        $this->xmlWriter->startElement(self::ELEMENT_PRIORITY);
         $this->xmlWriter->text($priority);
         $this->xmlWriter->endElement();
     }
 
     public function setFrequency($frequency)
     {
-        $this->xmlWriter->startElement(Self::ELEMENT_FREQUENCY);
+        $this->xmlWriter->startElement(self::ELEMENT_FREQUENCY);
         $this->xmlWriter->text($frequency);
         $this->xmlWriter->endElement();
     }
 
-    public function finish()
+    public function addImage($loc, $caption = null, $title = null)
     {
-        $this->xmlWriter->endElement();
+        $image = new Image($this->xmlWriter, $loc);
+        if ($caption instanceof Closure) {
+            call_user_func($caption, $image);
+        } elseif (!empty($caption)) {
+            $image->setCaption($caption);
+        }
+
+        if (!empty($title)) {
+            $image->setTitle($title);
+        }
+
+        $image->finish();
     }
 }

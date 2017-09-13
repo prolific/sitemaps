@@ -101,5 +101,6 @@ class Sitemap
         $this->xmlWriter->endElement();
         $this->xmlWriter->endDocument();
         $this->flush();
+        $this->xmlWriter = null;
     }
 }
