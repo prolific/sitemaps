@@ -1,5 +1,5 @@
 {
-    "name": "prolificrohit/sitemap",
+    "name": "prolificrohit/sitemaps",
     "license": "GNU GPLv3",
     "authors": [
         {
@@ -10,7 +10,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "ProlificRohit\\Sitemap\\": "src/"
+            "ProlificRohit\\Sitemaps\\": "src/"
         }
     }
 }
