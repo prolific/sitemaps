@@ -1,0 +1,16 @@
+{
+    "name": "prolificrohit/sitemap",
+    "license": "GNU GPLv3",
+    "authors": [
+        {
+            "name": "Rohit Agarwal",
+            "email": "1993rohitagarwal@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "ProlificRohit\\Sitemap\\": "src/"
+        }
+    }
+}
