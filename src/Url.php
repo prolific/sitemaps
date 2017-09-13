@@ -16,10 +16,11 @@ class Url
     public function __construct($xmlWriter, $loc)
     {
         $this->xmlWriter = $xmlWriter;
+        $this->xmlWriter->startElement(self::ELEMENT_URL);
         $this->setLoc($loc);
     }
 
-    private function setLoc($loc)
+    protected function setLoc($loc)
     {
         $this->xmlWriter->startElement(Self::ELEMENT_LOC);
         $this->xmlWriter->text($loc);
@@ -44,6 +45,11 @@ class Url
     {
         $this->xmlWriter->startElement(Self::ELEMENT_FREQUENCY);
         $this->xmlWriter->text($frequency);
+        $this->xmlWriter->endElement();
+    }
+
+    public function finish()
+    {
         $this->xmlWriter->endElement();
     }
 }
