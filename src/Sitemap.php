@@ -24,22 +24,34 @@ class Sitemap
     protected $buffer = 1000;
     protected $maxUrls = 2000;
     protected $files = [];
+    protected $currentFile;
+    protected $attributes = [
+        "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9",
+        "xmlns:image" => "http://www.google.com/schemas/sitemap-image/1.1"
+    ];
 
-    public function __construct($file)
+    public function __construct($file, $attributes = [])
     {
         $this->pathParts = pathinfo($file);
+        if (!empty($attributes)) {
+            $this->attributes = $attributes;
+        }
         $this->newFile();
     }
 
     protected function newFile()
     {
         $this->urlsCount = 0;
+        $this->setCurrentFile();
         $this->xmlWriter = new XMLWriter;
         $this->xmlWriter->openMemory();
         $this->xmlWriter->setIndent(true);
         $this->xmlWriter->setIndentString(' ');
         $this->xmlWriter->startDocument('1.0', 'UTF-8');
         $this->xmlWriter->startElement(self::ELEMENT_URLSET);
+        foreach ($this->attributes as $key => $value) {
+            $this->xmlWriter->writeAttribute($key, $value);
+        }
     }
 
     public function setBuffer($buffer)
@@ -54,7 +66,7 @@ class Sitemap
         return $this;
     }
 
-    protected function getFile()
+    protected function setCurrentFile()
     {
         if (!file_exists($this->pathParts['dirname'])) {
             mkdir($this->pathParts['dirname'], 0777, true);
@@ -62,16 +74,18 @@ class Sitemap
 
         $name = $this->pathParts['filename'];
         $filesCount = count($this->files);
-        if ($filesCount > 1) {
+        if ($filesCount > 0) {
+            $filesCount++;
             $name = "$name-$filesCount";
         }
 
-        $path = $this->pathParts['dirname']."/".$name;
+        $file = $this->pathParts['dirname']."/".$name;
         if (!empty($this->pathParts['extension'])) {
-            $path = $path.".".$this->pathParts['extension'];
+            $file = $file.".".$this->pathParts['extension'];
         }
 
-        return $path;
+        $this->currentFile = $file;
+        file_put_contents($this->currentFile, null);
     }
 
     protected function validateSize()
@@ -111,9 +125,7 @@ class Sitemap
 
     protected function flush()
     {
-        $filePath = $this->getFile();
-        file_put_contents($filePath, $this->xmlWriter->flush(true), FILE_APPEND);
-        $this->files[] = $filePath;
+        file_put_contents($this->currentFile, $this->xmlWriter->flush(true), FILE_APPEND);
     }
 
     public function finish()
@@ -121,6 +133,8 @@ class Sitemap
         $this->xmlWriter->endElement();
         $this->xmlWriter->endDocument();
         $this->flush();
+        $this->files[] = pathinfo($this->currentFile, PATHINFO_BASENAME);
+        $this->currentFile = null;
         $this->xmlWriter = null;
 
         return $this->files;
