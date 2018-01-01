@@ -1,13 +1,15 @@
 {
     "name": "prolificrohit/sitemaps",
     "license": "GNU GPLv3",
-    "authors": [
-        {
-            "name": "Rohit Agarwal",
-            "email": "1993rohitagarwal@gmail.com"
-        }
-    ],
-    "require": {},
+    "description": "A simple, scalable, highly extensible and seo friendly php sitemap generator.",
+    "keywords": ["sitemap", "generator", "sitemap-generator", "sitemap-xml", "php", "seo-friendly", "simple-sitemaps", "scalable", "extensible"],
+    "authors": [{
+        "name": "Rohit Agarwal",
+        "email": "1993rohitagarwal@gmail.com"
+    }],
+    "require": {
+        "php": ">=5.1.2",
+    },
     "autoload": {
         "psr-4": {
             "ProlificRohit\\Sitemaps\\": "src/"
