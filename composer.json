@@ -1,6 +1,6 @@
 {
     "name": "prolificrohit/sitemaps",
-    "license": "GNU GPLv3",
+    "license": "GPL-3.0-or-later",
     "description": "A simple, scalable, highly extensible and seo friendly php sitemap generator.",
     "keywords": ["sitemap", "generator", "sitemap-generator", "sitemap-xml", "php", "seo-friendly", "simple-sitemaps", "scalable", "extensible"],
     "authors": [{
